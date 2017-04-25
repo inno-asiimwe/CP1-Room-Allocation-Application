@@ -1,0 +1,3 @@
+
+class TestDojo(TestCase):
+    pass

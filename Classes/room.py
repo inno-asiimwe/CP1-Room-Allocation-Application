@@ -1,8 +1,13 @@
 class Room:
-    pass
+    def __init__(self, name, typ):
+        self.typ = typ
+        self.name = name
 
 class Office:
-    pass
+    def __init__(self, name):
+        Room.__init__(self, name, typ = 'office')
+
 
 class LivingSpace:
-    pass
+    def __init__(self, name):
+        Room.__init__(self,name, typ = 'livingspace')

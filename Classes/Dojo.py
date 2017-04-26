@@ -1,5 +1,5 @@
-from classes.room import Room,Office
-from classes.person import Fellow, Staff
+from classes.room import Room, Office, LivingSpaces
+from classes.person import Fellow, Staff, Person
 from random import randint
 
 class Dojo:
@@ -19,6 +19,7 @@ class Dojo:
         self.OfficesNotFull = []
         self.FullRooms = []
         self.FellowsLivingIn = []
+        self.FellowsLivingOut = []
 
 
     def create_room(self, typ, *names):
@@ -69,7 +70,6 @@ class Dojo:
             if exists:
                 raise ValueError("Person already exists")
             else:
-
                 if role == 'staff' or role == 'fellow':
 
                     if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
@@ -98,17 +98,16 @@ class Dojo:
                         self.Staff.append(new_person)
                 else:
                     raise ValueError("Role is either staff or fellow")
-
             return new_person
-
         raise TypeError("Inputs should be strings")
+
 
     def allocate_office(self, person):
         #we randomly pic a room from vacant rooms
         if len(self.OfficesNotFull) > 0:
-
             index = randint(0,len(self.OfficesNotFull) - 1)
             office = self.OfficesNotFull[index]
+
             while len(office.occupants) < office.max:
                 office.occupants.append(person)
                 person.office = office.name
@@ -124,11 +123,12 @@ class Dojo:
         #randomly choosing an index of a space
 
         if len(self.LivingSpacesNotFull) > 0:
-
             index = randint(0,len(self.LivingSpacesNotFull) - 1)
             space = self.LivingSpacesNotFull[index]
+
             #making sure the space is not full
             while len(space.occupants) < space.max:
+
                 #allocatig a person a space
                 space.occupants.append(person)
                 person.Livingspace = space.name
@@ -140,12 +140,6 @@ class Dojo:
                     LivingSpacesFull.append(space)
                     LivingSpacesNotFull.remove(space)
 
-        #raise RuntimeError ("There are no more spaces to locate")
-    def print_room(self, room):
-        rm = self.Rooms[room]
-        print(rm.occupant)
 
-dojo = Dojo()
-dojo.create_room('office', 'Germany')
-dojo.add_person('inno Asiimwe', 'staff')
-print(dojo.Rooms['Germany'].name)
+    def print_room(self, room):
+        print(self.Rooms[room])

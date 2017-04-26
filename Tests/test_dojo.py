@@ -77,13 +77,35 @@ class TestDojo(unittest.TestCase):
 
     @mock.patch('builtins.print')
     def test_print_room_success(self, fake_print):
-        room1 = self.dojo.create_room('office', 'Germany')
+        """should print occupants of the room"""
+        self.dojo.create_room('office', 'Germany')
         new_person = self.dojo.add_person('patrick', 'staff')
         self.dojo.print_room('Germany')
         fake_print.assert_called_with('patrick')
 
-    # def test_print_allocation_success(self):
-    #     pass
+    @mock.patch('builtins.print')
+    def test_print_allocation_success(self, fake_print):
+        """should print occupants per room"""
+        self.dojo.create_room('office', 'Germany')
+        new_person = self.dojo.add_person('patrick', 'staff')
+        self.dojo.print_allocation()
+        fake_print.assert_called_with('Germany')
+        fake_print.assert_called_with('----'*3)
+        fake_print.assert_called_with('patrick')
+
+    @mock.patch('builtins.print')
+    def test_print_unallocated(self, fake_print):
+        """All are allocated offices, all staff are not allocated Livigspaces,
+        Some Fellows opt out of being allocated livingspaces"""
+        self.dojo.create_room('office', 'Germany', 'Brazil', 'Nigeria')
+        self.dojo.create_room('Livingspace', 'Nairobi')
+        staff1 = self.add_person('Innocent', 'staff')
+        fellow1 = self.add_person('Asiimwe', 'fellow' 'y')
+        fellow2 = self.add_person('Sheila', 'fellow' 'n')
+        fake_print.assert_called_with('Innocent')
+        fake_print.assert_called_with('Sheila')
+
+
 
 
 

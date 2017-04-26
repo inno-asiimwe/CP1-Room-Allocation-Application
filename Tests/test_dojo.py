@@ -47,33 +47,34 @@ class TestDojo(unittest.TestCase):
 
     def test_person_is_not_already_added(self):
         """Person can be only added once"""
-        pass
+        new_person1 = self.dojo.add_person('patrick', 'fellow', 'y')
+        self.assertRaises(ValueError, self.dojo.add_person, 'patrick','fellow','y')
 
     def test_person_added_has_intended_attributes(self):
         new_person = self.dojo.add_person('patrick', 'fellow', 'y')
-        assertEqual([new_person.name, new_person.type], ['patrick', 'fellow'])
-
-
-    # def test_person_is_fellow_or_staff(self):
-    #     """Person created must be either an instance of fellow or staff"""
-    #     new_person1 = dojo.createPerson('patrick', 'fellow', 'y')
-    #     new_person2 = dojo.createPerson('john', 'staff')
+        self.assertEqual([new_person.name, new_person.role], ['patrick', 'fellow'])
     #
-    #     assertTrue(IsInstance(new_person1, Fellow) == IsInstance(new_person2, Staff))
-
-
+    #
+    # # def test_person_is_fellow_or_staff(self):
+    # #     """Person created must be either an instance of fellow or staff"""
+    # #     new_person1 = dojo.createPerson('patrick', 'fellow', 'y')
+    # #     new_person2 = dojo.createPerson('john', 'staff')
+    # #
+    # #     assertTrue(IsInstance(new_person1, Fellow) == IsInstance(new_person2, Staff))
+    #
+    #
     def test_add_person_raises_typeerror_for_nonstrings(self):
         """arguments must be strings"""
-        new_person1 = self.dojo.add_person(78, 'fellow', 'y')
-    #
-    #
-    # def test_add_person_raises_valueerror_for_type_not_staff_or_fellow(self):
-    #     """type argument should only be staff or fellow"""
-    #     self.assertRaises(ValueError("type must be staff or Fellow"), add_person, )
-    #
-    #
-    # def test_raises_value_error_for_staff_livingin(self):
-    #     """Staff can not opt to leave in"""
+        self.assertRaises(TypeError, self.dojo.add_person, 78, 'fellow', 'y')
+    # #
+    # #
+    # # def test_add_person_raises_valueerror_for_type_not_staff_or_fellow(self):
+    # #     """type argument should only be staff or fellow"""
+    # #     self.assertRaises(ValueError("type must be staff or Fellow"), add_person, )
+    # #
+    # #
+    # # def test_raises_value_error_for_staff_livingin(self):
+    # #     """Staff can not opt to leave in"""
 
 
 if __name__ == '__main__':

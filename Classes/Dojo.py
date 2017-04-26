@@ -57,30 +57,49 @@ class Dojo:
             #     raise ValueError("type should be office or Living space");
     #
     def add_person(self, name, role, wants_acommodation):
-        if role == 'staff' or role == 'fellow':
-            if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
-                #creating a fellow object for the person we are adding, allocate both office and accomodation
-                new_person = Fellow(name)
-                self.allocate_office(new_person)
-                self.allocate_accomodation(new_person)
-                #add fellow to the list of all fellows
-                self.Fellows.append(new_person)
-            #if fellow opted out of accomodation only allocate office space and append fellow to the list of all fellows
-            if role.lower() =='fellow' and wants_acommodation == 'n':
-                new_person = Fellow(name)
-                self.allocate_office(new_person)
-                self.Fellows.append(new_person)
-            #making sure that fellow must always opt in or out of accomodation
-            if role.lower() == 'fellow' and (wants_acommodation == None or wants_acommodation == ''):
-                raise(ValueError("Fellow should either opt in or out for accomodation"))
+        exists = False
+        if isinstance(name, str) and isinstance(role, str) and (wants_acommodation in ['y', 'Y','n', 'N']):
 
-            if role.lower() == 'staff':
-                new_person = Staff(name)
-                print()
-                self.allocate_office(new_person)
-                self.Staff.append(new_person)
+            for person in self.Persons:
+                if name == person.name:
+                    exists = True
 
-        raise(ValueError)
+            if exists:
+                raise ValueError("Person already exists")
+            else:
+
+                if role == 'staff' or role == 'fellow':
+
+                    if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
+                        #creating a fellow object for the person we are adding, allocate both office and accomodation
+                        new_person = Fellow(name)
+                        self.Persons.append(new_person)
+                        self.allocate_office(new_person)
+                        self.allocate_accomodation(new_person)
+                        #add fellow to the list of all fellows
+                        self.Fellows.append(new_person)
+                    #if fellow opted out of accomodation only allocate office space and append fellow to the list of all fellows
+                    if role.lower() =='fellow' and wants_acommodation == 'n':
+                        new_person = Fellow(name)
+                        self.Persons.append(new_person)
+                        self.allocate_office(new_person)
+                        self.Fellows.append(new_person)
+                    #making sure that fellow must always opt in or out of accomodation
+                    if role.lower() == 'fellow' and (wants_acommodation == None or wants_acommodation == ''):
+                        raise ValueError("Fellow should either opt in or out for accomodation")
+
+                    if role.lower() == 'staff':
+                        new_person = Staff(name)
+                        self.Persons.append(new_person)
+                        print()
+                        self.allocate_office(new_person)
+                        self.Staff.append(new_person)
+                else:
+                    raise ValueError("Role is either staff or fellow")
+
+            return new_person
+
+        raise TypeError("Inputs should be strings")
 
     def allocate_office(self, person):
         #we randomly pic a room from vacant rooms

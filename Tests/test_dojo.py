@@ -1,7 +1,6 @@
 import unittest
 from classes.Dojo import Dojo
-
-
+from unittest import mock
 
 class TestDojo(unittest.TestCase):
 
@@ -75,6 +74,15 @@ class TestDojo(unittest.TestCase):
     # #
     # # def test_raises_value_error_for_staff_livingin(self):
     # #     """Staff can not opt to leave in"""
+
+    @mock.patch('builtins.print')
+    def test_print_room_success(self, fake_print):
+        room1 = self.dojo.create_room('office', 'Germany')
+        new_person = self.dojo.add_person('patrick', 'staff')
+        self.dojo.print_room('Germany')
+        fake_print.assert_called_with('patrick')
+
+
 
 
 if __name__ == '__main__':

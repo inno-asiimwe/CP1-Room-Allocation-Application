@@ -11,6 +11,8 @@ class Dojo:
         self.Staff = []
         self.VacantRooms = []
         self.NewRooms = []
+        self.OfficesFull = []
+        self.OfficesNotFull = []
         self.FullRooms = []
         self.FellowsLivingIn = []
 
@@ -56,14 +58,14 @@ class Dojo:
             if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                 #creating a fellow object for the person we are adding, allocate both office and accomodation
                 new_person = Fellow(name)
-                new_person.allocate_office()
-                new_person.allocate_accomodation()
+                self.allocate_office(new_person)
+                self.allocate_accomodation(new_person)
                 #add fellow to the list of all fellows
                 self.Fellows.append(new_person)
             #if fellow opted out of accomodation only allocate office space and append fellow to the list of all fellows
             if role.lower() =='fellow' and wants_acommodation == 'n':
                 new_person = Fellow(name)
-                new_person.allocate_office()
+                self.allocate_office(new_person)
                 self.Fellows.append(new_person)
             #making sure that fellow must always opt in or out of accomodation
             if role.lower() == 'fellow' and (wants_acommodation == None or wants_acommodation == ''):
@@ -71,8 +73,18 @@ class Dojo:
 
             if role.lower() == 'staff':
                 new_person = Staff(name)
-                new_person.allocate_office()
+                self.allocate_office(new_person)
                 self.Staff.append(new_person)
+
+    def allocate_office(self, person):
+        #we randomly pic a room from vacant rooms
+        index = randint(0,len(self.VacantRooms))
+        while self.VacantRooms[index].occupants 
+
+
+    def allocate_accomodation():
+        pass
+
 
 
 

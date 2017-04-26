@@ -1,5 +1,6 @@
 from classes.room import Room,Office
 from classes.person import Fellow, Staff
+from random import randint
 class Dojo:
 
     def __init__(self):
@@ -7,6 +8,8 @@ class Dojo:
         self.Persons = []
         self.Offices = []
         self.LivingSpaces = []
+        self.LivingSpacesFull = []
+        self.LivingSpacesNotFull = []
         self.Fellows = []
         self.Staff = []
         self.VacantRooms = []
@@ -73,23 +76,44 @@ class Dojo:
 
             if role.lower() == 'staff':
                 new_person = Staff(name)
+                print()
                 self.allocate_office(new_person)
                 self.Staff.append(new_person)
 
+        raise(ValueError)
+
     def allocate_office(self, person):
         #we randomly pic a room from vacant rooms
-        index = randint(0,len(self.VacantRooms))
-        while self.VacantRooms[index].occupants 
+        if len(self.OfficesNotFull) > 0:
+
+            index = randint(0,len(self.OfficesNotFull) - 1)
+            office = self.OfficesNotFull[index]
+            while len(office.occupants) < office.max:
+                office.occupants.append(person)
+                person.office = office.name
+
+                if len(office.occupants) == office.max:
+                    OfficesFull.append(office)
+                    OfficesNotFull.remove(office)
+        #raise RuntimeError("There are no offices to allocate")
 
 
-    def allocate_accomodation():
-        pass
+    def allocate_accomodation(self,person):
+        #randomly choosing an index of a space
 
+        if len(self.LivingSpacesNotFull) > 0:
 
+            index = randint(0,len(self.LivingSpacesNotFull) - 1)
+            space = self.LivingSpacesNotFull[index]
+            #making sure the space is not full
+            while len(space.occupants) < space.max:
+                #allocatig a person a space
+                space.occupants.append(person)
+                person.Livingspace = space.name
+                print("{} has been allocated the office {}".format(person.name, space.name))
 
-
-
-
-
-
-        raise(ValueError)
+                #if a space fills up, move it to the FULL list and remove it from the not full list
+                if len(space.occupants) == space.max:
+                    LivingSpacesFull.append(space)
+                    LivingSpacesNotFull.remove(space)
+        #raise RuntimeError ("There are no more spaces to locate")

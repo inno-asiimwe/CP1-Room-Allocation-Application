@@ -82,6 +82,9 @@ class TestDojo(unittest.TestCase):
         self.dojo.print_room('Germany')
         fake_print.assert_called_with('patrick')
 
+    # def test_print_allocation_success(self):
+    #     pass
+
 
 
 

@@ -1,10 +1,11 @@
 from classes.room import Room,Office
 from classes.person import Fellow, Staff
 from random import randint
+
 class Dojo:
 
     def __init__(self):
-        self.Rooms = []
+        self.Rooms = {}
         self.Persons = []
         self.Offices = []
         self.LivingSpaces = []
@@ -31,21 +32,22 @@ class Dojo:
 
                 else:
 
-                    for room in self.Rooms:
-                        if name == room.name:
+                    if name in self.Rooms:
                             raise ValueError("Room  already exists")
 
                     if typ.lower() == 'office':
                         new_room = Office(name)
+                        self.OfficesNotFull.append(new_room)
                         self.Offices.append(new_room)
-                        self.Rooms.append(new_room)
+                        self.Rooms.update({new_room.name:new_room})
                         new_rooms.append(new_room)
                         print("An Office called {} has been successfully created".format(name))
 
                     if typ.lower() == 'livingspace':
                         new_room = LivingSpace(name)
-                        self.offices.append(new_room)
-                        self.Rooms.append(new_room)
+                        self.LivingSpacesNotFull.append(new_room)
+                        self.LivingSpaces.append(new_room)
+                        self.Rooms.update({new_room.name:new_room})
                         new_rooms.append(new_room)
                         print("A Living space called {} has been successfully created".format(name))
 
@@ -55,8 +57,8 @@ class Dojo:
         raise TypeError("wrong type")
             # if typ.lower() != 'office' or typ.strip().lower() != 'livingspace':
             #     raise ValueError("type should be office or Living space");
-    #
-    def add_person(self, name, role, wants_acommodation):
+
+    def add_person(self, name, role, wants_acommodation = 'n'):
         exists = False
         if isinstance(name, str) and isinstance(role, str) and (wants_acommodation in ['y', 'Y','n', 'N']):
 
@@ -110,14 +112,15 @@ class Dojo:
             while len(office.occupants) < office.max:
                 office.occupants.append(person)
                 person.office = office.name
+                self.Rooms[office.name] = Office
 
                 if len(office.occupants) == office.max:
-                    OfficesFull.append(office)
-                    OfficesNotFull.remove(office)
+                    self.OfficesFull.append(office)
+                    self.OfficesNotFull.remove(office)
         #raise RuntimeError("There are no offices to allocate")
 
 
-    def allocate_accomodation(self,person):
+    def allocate_accomodation(self, person):
         #randomly choosing an index of a space
 
         if len(self.LivingSpacesNotFull) > 0:
@@ -129,10 +132,20 @@ class Dojo:
                 #allocatig a person a space
                 space.occupants.append(person)
                 person.Livingspace = space.name
+                self.Rooms[space.name] = space
                 print("{} has been allocated the office {}".format(person.name, space.name))
 
                 #if a space fills up, move it to the FULL list and remove it from the not full list
                 if len(space.occupants) == space.max:
                     LivingSpacesFull.append(space)
                     LivingSpacesNotFull.remove(space)
+
         #raise RuntimeError ("There are no more spaces to locate")
+    def print_room(self, room):
+        rm = self.Rooms[room]
+        print(rm.occupant)
+
+dojo = Dojo()
+dojo.create_room('office', 'Germany')
+dojo.add_person('inno Asiimwe', 'staff')
+print(dojo.Rooms['Germany'].name)

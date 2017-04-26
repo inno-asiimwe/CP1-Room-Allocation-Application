@@ -2,14 +2,9 @@ class Room:
     def __init__(self, typ, name,max):
         self.typ = typ
         self.name = name
+        self.max = max
         self.occupants = []
 
-    def print_occupants(self):
-        names = []
-        for occupant in self.occupants:
-            names.append(occupant.name)
-
-        return names
 
 class Office:
     def __init__(self, name):

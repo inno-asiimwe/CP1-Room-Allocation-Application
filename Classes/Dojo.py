@@ -1,4 +1,5 @@
 from classes.room import Room,Office
+from classes.person import Fellow, Staff
 class Dojo:
 
     def __init__(self):

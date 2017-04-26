@@ -2,6 +2,7 @@ import unittest
 from classes.Dojo import Dojo
 
 
+
 class TestDojo(unittest.TestCase):
 
     def setUp(self):
@@ -24,7 +25,7 @@ class TestDojo(unittest.TestCase):
         """The room created should be either office or living space"""
         new_room = self.dojo.create_room('office', 'Germany')
         self.assertTrue([new_room[0].typ, new_room[0].name] == ['office', 'Germany'])
-    
+
     def test_room_created_only_accepts_strings(self):
         """Input both inputs should be strings """
         self.assertRaises(TypeError, self.dojo.create_room, 5, 2)
@@ -39,9 +40,9 @@ class TestDojo(unittest.TestCase):
 
     def test_add_person_success(self):
         """A person should be added to"""
-        before_count = dojo.number_of_people
-        new_person = dojo.createPerson('patrick', 'fellow', 'y')
-        after_count = dojo.number_of_people
+        before_count = len(self.dojo.Persons)
+        new_person = self.dojo.add_person('patrick', 'fellow', 'y')
+        after_count = len(self.dojo.Persons)
         self.assertEqual(before_count + 1, after_count)
 
     def test_person_is_not_already_added(self):
@@ -49,7 +50,7 @@ class TestDojo(unittest.TestCase):
         pass
 
     def test_person_added_has_intended_attributes(self):
-        new_person = dojo.createPerson('patrick', 'fellow', 'y')
+        new_person = self.dojo.add_person('patrick', 'fellow', 'y')
         assertEqual([new_person.name, new_person.type], ['patrick', 'fellow'])
 
 
@@ -63,7 +64,7 @@ class TestDojo(unittest.TestCase):
 
     def test_add_person_raises_typeerror_for_nonstrings(self):
         """arguments must be strings"""
-        new_person1 = dojo.createPerson(78, 'fellow', 'y')
+        new_person1 = self.dojo.add_person(78, 'fellow', 'y')
     #
     #
     # def test_add_person_raises_valueerror_for_type_not_staff_or_fellow(self):

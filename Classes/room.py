@@ -4,6 +4,13 @@ class Room:
         self.name = name
         self.occupants = []
 
+    def print_occupants(self):
+        names = []
+        for occupant in self.occupants:
+            names.append(occupant.name)
+
+        return names
+
 class Office:
     def __init__(self, name):
         Room.__init__(self, 'office', name, 6)

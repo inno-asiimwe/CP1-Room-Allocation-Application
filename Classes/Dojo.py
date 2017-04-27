@@ -49,6 +49,7 @@ class Dojo:
             if role.lower() == 'staff' or role.lower() == 'fellow':
                 new_person = Fellow(name)
                 self.allocate_office(new_person)
+                self.Persons.append(new_person)
 
                 if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                     #creating a fellow object for the person we are adding, allocate both office and accomodation
@@ -58,7 +59,7 @@ class Dojo:
             else:
                 raise ValueError("Role is either staff or fellow")
 
-            self.Persons.append(new_person)
+
             return new_person
         raise TypeError("Inputs should be strings")
 
@@ -119,6 +120,7 @@ class Dojo:
 
 
     def get_allocated_rooms(self):
+        """returns a list of room objects with atleast one occupant"""
         allocated = []
         for room in self.Rooms:
             if len(self.Rooms[room].occupants) > 0:
@@ -126,6 +128,7 @@ class Dojo:
         return allocated
 
     def get_allocations(self):
+
         separator ='-------------------'
         rooms = self.get_allocated_rooms()
         prints = []
@@ -140,6 +143,7 @@ class Dojo:
         return prints
 
     def list_to_print(self, alist, filename = None):
+        """writes contents of the list to a file or console"""
         for item in alist:
             if(filename != None):
                 with open(filename, 'a')as f:
@@ -147,8 +151,19 @@ class Dojo:
             else:
                 print(item)
 
-        def print_unallocated(self):
-            pass
+    def print_unallocated(self):
+        unallocated = self.get_unallocated_persons()
+        self.list_to_print(unallocated)
+
+    def get_unallocated_persons(self):
+        unallocated = []
+        people = self.Persons
+
+        for person in people:
+            if person.office == None or person.accomodation == None:
+                unallocated.append(person.name)
+        return unallocated
+
 
 
 dojo = Dojo()
@@ -157,5 +172,7 @@ office1 = dojo.create_room('livingspace', 'Berlin')
 office3 = dojo.create_room('office', 'kenya')
 fellow1 = dojo.add_person('peter', 'fellow', 'y')
 staff1 = dojo.add_person('inno', 'staff')
-print(dojo.Rooms)
+f = dojo.get_unallocated_persons
+print(f)
 dojo.print_allocations('example')
+dojo.print_unallocated()

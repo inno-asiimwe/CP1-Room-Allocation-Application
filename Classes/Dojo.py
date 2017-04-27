@@ -111,7 +111,7 @@ class Dojo:
             index = randint(0,len(self.OfficesNotFull) - 1)
             office = self.OfficesNotFull[index]
 
-            while len(office.occupants) < office.max:
+            if (office.occupants) < office.max:
                 office.occupants.append(person)
                 person.office = office.name
                 self.Rooms[office.name] = office
@@ -130,7 +130,7 @@ class Dojo:
             space = self.LivingSpacesNotFull[index]
 
             #making sure the space is not full
-            while len(space.occupants) < space.max:
+            if len(space.occupants) < space.max:
 
                 #allocatig a person a space
                 space.occupants.append(person)
@@ -146,25 +146,54 @@ class Dojo:
     #prints names of all the people in the room
     def print_room(self, room):
         if room in self.Rooms:
-            print(self.Rooms[room])
-            # for name in self.Rooms[room].occupants:
-            #     print(name)
+            for person in self.Rooms[room].occupants:
+                 print(person.name)
 
     #prints all allocations
     def print_allocations(self, filename = None):
-        if filename:
-            with Open(filename, 'w') as f:
-                for key,value in self.Rooms.items():
-                    if len(value.occupants) > 0:
-                        f.write(key)
-                        f.write('---'*4 +"\n")
-                        f.write(','.join(value.occupants))
-        else:
-            for key, value in self.Rooms.items():
-                if len(value.occupants) > 0:
-                    print(key)
-                    print('---'*4)
-                    print(','.join(value.occupants))
+        rooms = self.getAllocatedRooms()
+
+        for room in rooms:
+            occupants = room.occupants
+            members = []
+            for occupant in occupants:
+                members.append(occupant.name)
+            print(room.name)
+            print('---------')
+            print(','.join(members))
+
+            #     """
+            # if filename:
+            #     with Open(filename, 'w')as f:
+            #         f.write(room.name)
+            #         f.write('-----------')
+            #         f.write(','.join(names))
+            #
+            #
+            # else:
+            #         print(room.name)
+            #         print('---------------')
+            #         print(','.join(names))
+
+
+        # word = []
+        # if filename:
+        #     with Open(filename, 'w') as f:
+        #         for key,value in self.Rooms.items():
+        #             if len(value.occupants) > 0:
+        #                 f.write(key)
+        #                 f.write('---'*4 +"\n")
+        #                 for occupant in value.occupants:
+        #                     word.append(occupant.name)
+        #                 f.write(','.join(word))
+        # else:
+        #     for key, value in self.Rooms.items():
+        #         if len(value.occupants) > 0:
+        #             print(key)
+        #             # print('---'*4)
+        #             # for occupant in value.occupants:
+        #             #     word.append(occupant.name)
+        #             # print(','.join(word))
 
     #printing all the unallocated persons
     def print_unallocated(self, filename = None):
@@ -175,6 +204,13 @@ class Dojo:
 
                 for fellow in FellowsLivingOut:
                     f.write(fellow.name)
+
+    def getAllocatedRooms(self):
+        allocated = []
+        for room in self.Rooms:
+            if len(self.Rooms[room].occupants) > 0:
+                allocated.append(self.Rooms[room])
+        return allocated
 
     def reallocate(person, room):
         if isinstance(room, Office) and room in self.OfficesNotFull:
@@ -193,9 +229,7 @@ office3 = dojo.create_room('office', 'kenya')
 fellow1 = dojo.add_person('peter', 'fellow', 'y')
 staff1 = dojo.add_person('inno', 'staff')
 print(staff1.name)
-print(staff1.accomodation)
-print(dojo.Rooms)
-print(dojo.Rooms['Uganda'])
+dojo.print_allocations()
 #print(dojo.Rooms['Uganda'].name)
 #dojo.print_allocations()
 #print(dojo.Rooms['uganda'])

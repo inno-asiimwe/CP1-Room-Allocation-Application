@@ -1,4 +1,4 @@
-from classes.room import Room, Office, LivingSpaces
+from classes.room import Room, Office,LivingSpace
 from classes.person import Fellow, Staff, Person
 from random import randint
 
@@ -76,7 +76,7 @@ class Dojo:
                         new_person = Fellow(name)
                         self.Persons.append(new_person)
                         self.allocate_office(new_person)
-                        self.allocate_accomodation.(new_person)
+                        self.allocate_accomodation(new_person)
                         self.FellowsLivingIn.append(new_person)
                         #add fellow to the list of all fellows
                         self.Fellows.append(new_person)
@@ -114,7 +114,7 @@ class Dojo:
             while len(office.occupants) < office.max:
                 office.occupants.append(person)
                 person.office = office.name
-                self.Rooms[office.name] = Office
+                self.Rooms[office.name] = office
 
                 if len(office.occupants) == office.max:
                     self.OfficesFull.append(office)
@@ -140,27 +140,28 @@ class Dojo:
 
                 #if a space fills up, move it to the FULL list and remove it from the not full list
                 if len(space.occupants) == space.max:
-                    LivingSpacesFull.append(space)
-                    LivingSpacesNotFull.remove(space)
+                    self.LivingSpacesFull.append(space)
+                    self.LivingSpacesNotFull.remove(space)
 
     #prints names of all the people in the room
     def print_room(self, room):
         if room in self.Rooms:
-            for names in self.Rooms[room]:
-                print(name)
+            print(self.Rooms[room])
+            # for name in self.Rooms[room].occupants:
+            #     print(name)
 
     #prints all allocations
-    def print_allocatios(self, filename = None):
+    def print_allocations(self, filename = None):
         if filename:
             with Open(filename, 'w') as f:
                 for key,value in self.Rooms.items():
-                    if len(value) > 0:
+                    if len(value.occupants) > 0:
                         f.write(key)
                         f.write('---'*4 +"\n")
                         f.write(','.join(value.occupants))
         else:
             for key, value in self.Rooms.items():
-                if len(value) > 0:
+                if len(value.occupants) > 0:
                     print(key)
                     print('---'*4)
                     print(','.join(value.occupants))
@@ -174,3 +175,27 @@ class Dojo:
 
                 for fellow in FellowsLivingOut:
                     f.write(fellow.name)
+
+    def reallocate(person, room):
+        if isinstance(room, Office) and room in self.OfficesNotFull:
+            old_office = person.office
+            self.Rooms[old_office].occupants.remove(person)
+            person.office = self.Rooms[room]
+        elif isinstance(room, livingspace) and room in self.LivingSpacesNotFull:
+            old_livingspace = person.accomodation
+
+
+dojo = Dojo()
+
+office1 = dojo.create_room('office', 'Uganda')
+office1 = dojo.create_room('livingspace', 'Berlin')
+office3 = dojo.create_room('office', 'kenya')
+fellow1 = dojo.add_person('peter', 'fellow', 'y')
+staff1 = dojo.add_person('inno', 'staff')
+print(staff1.name)
+print(staff1.accomodation)
+print(dojo.Rooms)
+print(dojo.Rooms['Uganda'])
+#print(dojo.Rooms['Uganda'].name)
+#dojo.print_allocations()
+#print(dojo.Rooms['uganda'])

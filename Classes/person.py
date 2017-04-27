@@ -3,6 +3,7 @@ class Person:
         self.role = role
         self.name = name
         self.office = None
+        self.accomodation = None
 
 class Staff(Person):
     def __init__(self, name):

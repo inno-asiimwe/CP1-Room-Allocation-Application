@@ -113,20 +113,49 @@ class Dojo:
 
     #prints all allocations
     def print_allocations(self, filename = None):
-        rooms = self.getAllocatedRooms()
+        """prints names of people in each room"""
+        allocations = self.get_allocations()
+        self.list_to_print(allocations, filename)
 
-        for room in rooms:
-            occupants = room.occupants
-            members = []
-            for occupant in occupants:
-                members.append(occupant.name)
-            print(room.name)
-            print('---------')
-            print(','.join(members))
 
-    def getAllocatedRooms(self):
+    def get_allocated_rooms(self):
         allocated = []
         for room in self.Rooms:
             if len(self.Rooms[room].occupants) > 0:
                 allocated.append(self.Rooms[room])
         return allocated
+
+    def get_allocations(self):
+        separator ='-------------------'
+        rooms = self.get_allocated_rooms()
+        prints = []
+        for room in rooms:
+            occupants = room.occupants
+            members = []
+            for occupant in occupants:
+                members.append(occupant.name)
+            memberstostring = ','.join(members)
+            print_string = room.name + '\n' + separator + '\n' + memberstostring + '\n'
+            prints.append(print_string)
+        return prints
+
+    def list_to_print(self, alist, filename = None):
+        for item in alist:
+            if(filename != None):
+                with open(filename, 'a')as f:
+                    f.write(item)
+            else:
+                print(item)
+
+        def print_unallocated(self):
+            pass
+
+
+dojo = Dojo()
+office1 = dojo.create_room('office', 'Uganda')
+office1 = dojo.create_room('livingspace', 'Berlin')
+office3 = dojo.create_room('office', 'kenya')
+fellow1 = dojo.add_person('peter', 'fellow', 'y')
+staff1 = dojo.add_person('inno', 'staff')
+print(dojo.Rooms)
+dojo.print_allocations('example')

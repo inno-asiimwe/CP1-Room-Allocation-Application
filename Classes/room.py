@@ -9,9 +9,7 @@ class Room:
 class Office(Room):
     def __init__(self, name):
         super(Office, self).__init__('office', name, 6)
-        # self.name = name
-        # self.max = 4
-        # self.typ = 'office'
+        
 
 
 class LivingSpace(Room):

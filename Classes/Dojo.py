@@ -1,25 +1,15 @@
 from classes.room import Room, Office,LivingSpace
 from classes.person import Fellow, Staff, Person
-from random import randint
+import random
 
 class Dojo:
 
     def __init__(self):
         self.Rooms = {}
         self.Persons = []
-        self.Offices = []
-        self.LivingSpaces = []
-        self.LivingSpacesFull = []
-        self.LivingSpacesNotFull = []
-        self.Fellows = []
-        self.Staff = []
-        self.VacantRooms = []
-        self.NewRooms = []
-        self.OfficesFull = []
-        self.OfficesNotFull = []
-        self.FullRooms = []
-        self.FellowsLivingIn = []
-        self.FellowsLivingOut = []
+        self.offices = []
+        self.livingspaces = []
+
 
 
     def create_room(self, use, *names):
@@ -35,9 +25,11 @@ class Dojo:
                     raise ValueError("Room  already exists")
                 elif use.lower() == 'office':
                         new_room = Office(name)
+                        self.offices.append(new_room)
                         print("A Living space called {} has been successfully created".format(name))
                 elif use.lower() == 'livingspace':
                     new_room = LivingSpace(name)
+                    self.livingspaces.append(new_room)
                     print("A Living space called {} has been successfully created".format(name))
                 else:
                     raise exception("Type should be office or livingspace")
@@ -61,56 +53,60 @@ class Dojo:
                 if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                     #creating a fellow object for the person we are adding, allocate both office and accomodation
                     self.allocate_accomodation(new_person)
-                    self.FellowsLivingIn.append(new_person)
                     #add fellow to the list of all fellows
-                    self.Fellows.append(new_person)
+
             else:
                 raise ValueError("Role is either staff or fellow")
 
+            self.Persons.append(new_person)
             return new_person
         raise TypeError("Inputs should be strings")
 
 
     def allocate_office(self, person):
-        #we randomly pic a room from vacant rooms
-        if len(self.OfficesNotFull) > 0:
-            index = randint(0,len(self.OfficesNotFull) - 1)
-            office = self.OfficesNotFull[index]
-
-            if len(office.occupants) < office.max:
-                office.occupants.append(person)
-                person.office = office.name
-                self.Rooms[office.name] = office
-
-                if len(office.occupants) == office.max:
-                    self.OfficesFull.append(office)
-                    self.OfficesNotFull.remove(office)
-        #raise RuntimeError("There are no offices to allocate")
+        """method randomily allocates an office to fellow or staff"""
+        #randomly picking an office from available offices
+        available = self.find_available(self.offices)
+        if len(available) > 0:
+            office = random.choice(available)
+            #assigning the office to the person
+            office.occupants.append(person)
+            person.office = office.name
+            #updating the dictionary Rooms with new Value
+            self.Rooms[office.name] = office
+            print("{} has been allocated the Living space {}".format(person.role, person.name, office.name))
+        else:
+            print("Not office allocated for {}".format(person.name))
 
 
     def allocate_accomodation(self, person):
+        """method randomly allocates an living spaces"""
+        #randomly picking a space
+        available = self.find_available(self.livingspaces)
 
-        #randomly choosing an index of a space
-        if len(self.LivingSpacesNotFull) > 0:
-            index = randint(0,len(self.LivingSpacesNotFull) - 1)
-            space = self.LivingSpacesNotFull[index]
+        if len(available):
+            space = random.choice(available)
+            #assigning the space to the person
+            space.occupants.append(person)
+            person.accomodation = space.name
+            #updating the dictionary
+            self.Rooms[space.name] = space
+            print("{} has been allocated the Living space {}".format(person.role, person.name, space.name))
+        else:
+            print("No living space allocated for {}".format(person.name))
 
-            #making sure the space is not full
-            if len(space.occupants) < space.max:
+    def find_available(self, alist):
+        """method returns a list of available offices or living spaces"""
+        new_list = []
 
-                #allocatig a person a space
-                space.occupants.append(person)
-                person.Livingspace = space.name
-                self.Rooms[space.name] = space
-                print("{} has been allocated the office {}".format(person.name, space.name))
-
-                #if a space fills up, move it to the FULL list and remove it from the not full list
-                if len(space.occupants) == space.max:
-                    self.LivingSpacesFull.append(space)
-                    self.LivingSpacesNotFull.remove(space)
+        for member in alist:
+            if len(member.occupants) < member.max:
+                new_list.append(member)
+        return new_list
 
     #prints names of all the people in the room
     def print_room(self, room):
+        """method to print names of all people in a room"""""
         if room in self.Rooms:
             for person in self.Rooms[room].occupants:
                  print(person.name)
@@ -128,29 +124,9 @@ class Dojo:
             print('---------')
             print(','.join(members))
 
-
     def getAllocatedRooms(self):
         allocated = []
         for room in self.Rooms:
             if len(self.Rooms[room].occupants) > 0:
                 allocated.append(self.Rooms[room])
         return allocated
-
-    def reallocate(person, room):
-        if isinstance(room, Office) and room in self.OfficesNotFull:
-            old_office = person.office
-            self.Rooms[old_office].occupants.remove(person)
-            person.office = self.Rooms[room]
-        elif isinstance(room, livingspace) and room in self.LivingSpacesNotFull:
-            old_livingspace = person.accomodation
-
-
-dojo = Dojo()
-
-office1 = dojo.create_room('office', 'Uganda')
-office1 = dojo.create_room('livingspace', 'Berlin')
-office3 = dojo.create_room('office', 'kenya')
-fellow1 = dojo.add_person('peter', 'fellow', 'y')
-staff1 = dojo.add_person('inno', 'staff')
-print(dojo.Rooms)
-dojo.print_allocations()

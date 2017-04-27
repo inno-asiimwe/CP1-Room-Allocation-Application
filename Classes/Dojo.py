@@ -30,9 +30,7 @@ class Dojo:
             for name in names:
                 if not isinstance(name, str):
                     raise TypeError("Name should be string")
-
                 else:
-
                     if name in self.Rooms:
                             raise ValueError("Room  already exists")
 
@@ -82,6 +80,7 @@ class Dojo:
                         self.FellowsLivingIn.append(new_person)
                         #add fellow to the list of all fellows
                         self.Fellows.append(new_person)
+
                     #if fellow opted out of accomodation only allocate office space and append fellow to the list of all fellows
                     if role.lower() =='fellow' and wants_acommodation == 'n':
                         new_person = Fellow(name)
@@ -124,8 +123,8 @@ class Dojo:
 
 
     def allocate_accomodation(self, person):
-        #randomly choosing an index of a space
 
+        #randomly choosing an index of a space
         if len(self.LivingSpacesNotFull) > 0:
             index = randint(0,len(self.LivingSpacesNotFull) - 1)
             space = self.LivingSpacesNotFull[index]
@@ -144,6 +143,34 @@ class Dojo:
                     LivingSpacesFull.append(space)
                     LivingSpacesNotFull.remove(space)
 
-
+    #prints names of all the people in the room
     def print_room(self, room):
-        print(self.Rooms[room])
+        if room in self.Rooms:
+            for names in self.Rooms[room]:
+                print(name)
+
+    #prints all allocations
+    def print_allocatios(self, filename = None):
+        if filename:
+            with Open(filename, 'w') as f:
+                for key,value in self.Rooms.items():
+                    if len(value) > 0:
+                        f.write(key)
+                        f.write('---'*4 +"\n")
+                        f.write(','.join(value.occupants))
+        else:
+            for key, value in self.Rooms.items():
+                if len(value) > 0:
+                    print(key)
+                    print('---'*4)
+                    print(','.join(value.occupants))
+
+    #printing all the unallocated persons
+    def print_unallocated(self, filename = None):
+        if filename:
+            with Open(filename, 'w') as f:
+                for member in self.Staff:
+                    f.write(member.name)
+
+                for fellow in FellowsLivingOut:
+                    f.write(fellow.name)

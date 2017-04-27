@@ -63,6 +63,7 @@ class Dojo:
         exists = False
         if isinstance(name, str) and isinstance(role, str) and (wants_acommodation in ['y', 'Y','n', 'N']):
 
+            #checking if a person already exists and raise an exception in case person exists
             for person in self.Persons:
                 if name == person.name:
                     exists = True
@@ -70,14 +71,15 @@ class Dojo:
             if exists:
                 raise ValueError("Person already exists")
             else:
-                if role == 'staff' or role == 'fellow':
+                if role.lower() == 'staff' or role.lower() == 'fellow':
 
                     if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                         #creating a fellow object for the person we are adding, allocate both office and accomodation
                         new_person = Fellow(name)
                         self.Persons.append(new_person)
                         self.allocate_office(new_person)
-                        self.allocate_accomodation(new_person)
+                        self.allocate_accomodation.(new_person)
+                        self.FellowsLivingIn.append(new_person)
                         #add fellow to the list of all fellows
                         self.Fellows.append(new_person)
                     #if fellow opted out of accomodation only allocate office space and append fellow to the list of all fellows
@@ -86,6 +88,8 @@ class Dojo:
                         self.Persons.append(new_person)
                         self.allocate_office(new_person)
                         self.Fellows.append(new_person)
+                        self.FellowsLivingOut(new_person)
+
                     #making sure that fellow must always opt in or out of accomodation
                     if role.lower() == 'fellow' and (wants_acommodation == None or wants_acommodation == ''):
                         raise ValueError("Fellow should either opt in or out for accomodation")

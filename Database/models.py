@@ -3,6 +3,9 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
+import datetime
+
+from sqlalchemy.orm import sessionmaker
 
 engine = create_engine('sqlite:///andela.db', echo=True)
 Base = declarative_base()
@@ -13,10 +16,15 @@ class Room(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String)
     use = Column(String)
+    max1 = Column(Integer)
+    occupants = Column(String)
 
-    def __init__ (self, name, use):
+    def __init__ (self, name, use,max1, occupants):
         self.name = name
         self.use = use
+        self.max1 = max1
+        self.occupants = occupants
+
 
 class Person(Base):
     """ """
@@ -24,10 +32,14 @@ class Person(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String)
     role = Column(String)
+    office = Column(String)
+    accomodation = Column(String)
 
-    def __init__ (self, name, role):
+    def __init__ (self, name, role,office, accomodation):
         self.name = name
         self.role = role
+        self.office = office
+        self.accomodation = accomodation
 
 class OfficeAllocation(Base):
     """"""

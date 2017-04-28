@@ -1,5 +1,6 @@
 from classes.room import Room, Office,LivingSpace
 from classes.person import Fellow, Staff, Person
+from Database.models import*
 import random
 
 class Dojo:
@@ -159,8 +160,7 @@ class Dojo:
         self.list_to_print(unallocated)
 
     def get_unallocated_persons(self):
-        """method returns a list of names of persons
-        who have not been allocated a office or living space """"
+        """method returns a list of names of persons who have not been allocated a office or living space """
         unallocated = []
         people = self.Persons
 
@@ -168,3 +168,40 @@ class Dojo:
             if person.office == None or person.accomodation == None:
                 unallocated.append(person.name)
         return unallocated
+
+    def save_sate(self, db ='sqlite:///andela.db'):
+        """Method to persist all the data into the database"""
+        engine = create_engine(db, echo=True)
+        # create a Session
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        #create objects
+        for person in self.Persons:
+            user = Person(person.name, person.role,person.office,person.accomodation)
+            session.add(user)
+
+        for room in self.Rooms:
+            occupants = self.Rooms[room].occupants
+            names = []
+            for occupant in occupants:
+                names.append(occupant.name)
+            name_str = ','.join(names)
+            user1 = Room(room, self.Rooms[room].use, self.Rooms[room].max,name_str )
+            session.add(user1)
+
+        session.commit()
+
+
+dojo = Dojo()
+office1 = dojo.create_room('office', 'Uganda')
+office1 = dojo.create_room('livingspace', 'Berlin')
+office3 = dojo.create_room('office', 'kenya')
+fellow1 = dojo.add_person('peter', 'fellow', 'y')
+staff1 = dojo.add_person('inno', 'staff')
+dojo.save_sate()
+for room in dojo.Rooms:
+    people = dojo.Rooms[room].occupants
+    occupants = []
+    for person in people:
+        print(person.name)

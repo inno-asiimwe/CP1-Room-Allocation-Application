@@ -59,6 +59,7 @@ class Dojo:
 
             self.Persons.append(new_person)
             self.allocate_office(new_person)
+            print('{} {} has been successfully added'.format(new_person.role, new_person.name))
             return new_person
         raise TypeError("Inputs should be strings")
 

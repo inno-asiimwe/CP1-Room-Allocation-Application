@@ -50,7 +50,7 @@ class Dojo:
             if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                 new_person = Fellow(name)
                 self.allocate_accomodation(new_person)
-            elif role.lower()='fellow'
+            elif role.lower()=='fellow':
                 new_person = Fellow(name)
             elif role.lower() == 'staff':
                 new_person = Staff(name)
@@ -74,13 +74,13 @@ class Dojo:
             person.office = office.name
             #updating the dictionary Rooms with new Value
             self.Rooms[office.name] = office
-            print("{} has been allocated the Living space {}".format(person.role, person.name, office.name))
+            print("{} {} has been allocated the  office {}".format(person.role, person.name, office.name))
         else:
-            print("Not office allocated for {}".format(person.name))
+            print("No office allocated for {}".format(person.name))
 
 
     def allocate_accomodation(self, person):
-        """method randomly allocates an living spaces"""
+        """method randomly allocates a living spaces"""
         #randomly picking a space
         available = self.find_available(self.livingspaces)
 
@@ -91,7 +91,7 @@ class Dojo:
             person.accomodation = space.name
             #updating the dictionary
             self.Rooms[space.name] = space
-            print("{} has been allocated the Living space {}".format(person.role, person.name, space.name))
+            print("{} {} has been allocated the Living space {}".format(person.role, person.name, space.name))
         else:
             print("No living space allocated for {}".format(person.name))
 
@@ -152,8 +152,8 @@ class Dojo:
                 print(item)
 
     def print_unallocated(self):
-        """method prints allthe names persons that have not been
-        unallocated either one or both rooms"""
+        """method prints all the names of persons that have not been
+        allocated either one or both rooms"""
         unallocated = self.get_unallocated_persons()
         self.list_to_print(unallocated)
 
@@ -167,9 +167,9 @@ class Dojo:
                 unallocated.append(person.name)
         return unallocated
 
-    def save_sate(self, db ='sqlite:///andela.db'):
+    def save_state(self, db ='sqlite:///andela.db'):
         """Method to persist all the data into the database"""
-        engine = create_engine(db, echo=True)
+        engine = create_engine(db, echo=False)
         # create a Session
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -189,17 +189,4 @@ class Dojo:
             session.add(user1)
 
         session.commit()
-
-
-dojo = Dojo()
-office1 = dojo.create_room('office', 'Uganda')
-office1 = dojo.create_room('livingspace', 'Berlin')
-office3 = dojo.create_room('office', 'kenya')
-fellow1 = dojo.add_person('peter', 'fellow', 'y')
-staff1 = dojo.add_person('inno', 'staff')
-dojo.save_sate()
-for room in dojo.Rooms:
-    people = dojo.Rooms[room].occupants
-    occupants = []
-    for person in people:
-        print(person.name)
+        session.close()

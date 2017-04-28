@@ -84,7 +84,7 @@ class Dojo:
         #randomly picking a space
         available = self.find_available(self.livingspaces)
 
-        if len(available):
+        if len(available) > 0:
             space = random.choice(available)
             #assigning the space to the person
             space.occupants.append(person)

@@ -27,7 +27,7 @@ class Dojo:
                 elif use.lower() == 'office':
                         new_room = Office(name)
                         self.offices.append(new_room)
-                        print("A Living space called {} has been successfully created".format(name))
+                        print("An office called {} has been successfully created".format(name))
                 elif use.lower() == 'livingspace':
                     new_room = LivingSpace(name)
                     self.livingspaces.append(new_room)
@@ -44,23 +44,21 @@ class Dojo:
 
     def add_person(self, name, role, wants_acommodation = 'n'):
         """Method creates either a staff or fellow object and returns it"""
-        exists = False
+
         if isinstance(name, str) and isinstance(role, str) and (wants_acommodation in ['y', 'Y','n', 'N']):
 
-            if role.lower() == 'staff' or role.lower() == 'fellow':
+            if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
                 new_person = Fellow(name)
-                self.allocate_office(new_person)
-                self.Persons.append(new_person)
-
-                if role.lower() == 'fellow' and wants_acommodation.lower() == 'y':
-                    #creating a fellow object for the person we are adding, allocate both office and accomodation
-                    self.allocate_accomodation(new_person)
-                    #add fellow to the list of all fellows
-
+                self.allocate_accomodation(new_person)
+            elif role.lower()='fellow'
+                new_person = Fellow(name)
+            elif role.lower() == 'staff':
+                new_person = Staff(name)
             else:
                 raise ValueError("Role is either staff or fellow")
 
-
+            self.Persons.append(new_person)
+            self.allocate_office(new_person)
             return new_person
         raise TypeError("Inputs should be strings")
 

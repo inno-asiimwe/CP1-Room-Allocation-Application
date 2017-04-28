@@ -128,6 +128,7 @@ class Dojo:
         return allocated
 
     def get_allocations(self):
+        """Formats strings for printing by print_allocations"""
 
         separator ='-------------------'
         rooms = self.get_allocated_rooms()
@@ -152,10 +153,14 @@ class Dojo:
                 print(item)
 
     def print_unallocated(self):
+        """method prints allthe names persons that have not been
+        unallocated either one or both rooms"""
         unallocated = self.get_unallocated_persons()
         self.list_to_print(unallocated)
 
     def get_unallocated_persons(self):
+        """method returns a list of names of persons
+        who have not been allocated a office or living space """"
         unallocated = []
         people = self.Persons
 
@@ -163,16 +168,3 @@ class Dojo:
             if person.office == None or person.accomodation == None:
                 unallocated.append(person.name)
         return unallocated
-
-
-
-dojo = Dojo()
-office1 = dojo.create_room('office', 'Uganda')
-office1 = dojo.create_room('livingspace', 'Berlin')
-office3 = dojo.create_room('office', 'kenya')
-fellow1 = dojo.add_person('peter', 'fellow', 'y')
-staff1 = dojo.add_person('inno', 'staff')
-f = dojo.get_unallocated_persons
-print(f)
-dojo.print_allocations('example')
-dojo.print_unallocated()

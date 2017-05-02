@@ -61,7 +61,7 @@ class Dojo:
             self.allocate_office(new_person)
             print('{} {} has been successfully added'.format(new_person.role, new_person.name))
             return new_person
-        raise TypeError("Inputs should be strings")
+        else:raise TypeError("Inputs should be strings")
 
 
     def allocate_office(self, person):
@@ -164,9 +164,40 @@ class Dojo:
         people = self.Persons
 
         for person in people:
-            if person.office == None or person.accomodation == None:
+            if person.office == None and person.accomodation == None:
                 unallocated.append(person.name)
         return unallocated
+
+    def reallocate_person(self, person_name, new_room):
+        if get_room_type(new_room) == 'office' and get_person(person_name) != "Person not found":
+            person = get_person(person_name)
+            old_office = self.person.office
+            self.Rooms[old_office].occupants.remove(person)
+            self.Rooms[new_room].occupants.append(person)
+            self.person.office = new_room
+        elif get_room_type(new_room) == 'livingspace' and get_person(person_name) != "Person not found":
+            person = get_person(person_name)
+            old_space = self.person.accomodation
+            self.Rooms[old_space].occupants.remove(person)
+            self.Rooms[new_room].occupants.append(person)
+            self.person.accomodation = new_room
+
+
+    def get_room_type(self, room_name):
+        room_type = self.Rooms[room_name].use
+        return room_type
+
+    def get_person(self, person_name):
+        for person in self.Persons:
+            if person.name == person_name:
+                value = person
+            else:
+                value = ""
+
+            if value != "":
+                return value
+            else:
+                return "Person not found"
 
     def save_state(self, db ='sqlite:///andela.db'):
         """Method to persist all the data into the database"""
@@ -177,7 +208,7 @@ class Dojo:
 
         #create objects
         for person in self.Persons:
-            user = Person(person.name, person.role,person.office,person.accomodation)
+            user = Person(name = person.name, role = person.role, office = person.office, accomodation = person.accomodation)
             session.add(user)
 
         for room in self.Rooms:
@@ -186,7 +217,7 @@ class Dojo:
             for occupant in occupants:
                 names.append(occupant.name)
             name_str = ','.join(names)
-            user1 = Room(room, self.Rooms[room].use, self.Rooms[room].max,name_str )
+            user1 = Room( name = room, use = self.Rooms[room].use, max1 = self.Rooms[room].max, occupants = name_str )
             session.add(user1)
 
         session.commit()

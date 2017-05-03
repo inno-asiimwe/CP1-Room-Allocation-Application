@@ -182,6 +182,21 @@ class Dojo:
             self.Rooms[new_room].occupants.append(person)
             self.person.accomodation = new_room
 
+    def load_people(self, filename):
+        """Adds people to rooms from textfile"""
+        with open(filename, 'r') as f:
+            content = f.readlines()
+
+        for line in content:
+            person = line.split()
+            name = person[0] + ' '+ person[1]
+            role = person[2]
+            if len(person) == 4:
+                wants_acommodation = person[3]
+
+            self.add_person(name, role, wants_acommodation)
+
+
 
     def get_room_type(self, room_name):
         room_type = self.Rooms[room_name].use
@@ -222,3 +237,11 @@ class Dojo:
 
         session.commit()
         session.close()
+
+
+
+dojo = Dojo()
+dojo.create_room('livingspace', 'Paris', 'Tokyo', 'Cape Town', 'Kampala', 'Nairobi', 'Kigali', 'Dubai')
+dojo.create_room('office', 'Germany', 'Italy', 'Gambia', 'France', 'Netherlands', 'Mexico')
+dojo.load_people('input.txt')
+dojo.print_allocations()

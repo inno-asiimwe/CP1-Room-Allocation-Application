@@ -45,9 +45,18 @@ class TestDojo(unittest.TestCase):
     def test_print_room_success(self, fake_print):
         """should print occupants of the room"""
         self.dojo.create_room('office', 'Germany')
-        new_person = self.dojo.add_person('patrick', 'staff')
+        self.dojo.add_person('patrick', 'staff')
         self.dojo.print_room('Germany')
         fake_print.assert_called_with('patrick')
+
+    def test_reallocate_person_success(self):
+        """should move a person from one room to a nother of the same type"""
+        self.dojo.create_room('office', 'Germany')
+        new_person = self.dojo.add_person('patrick', 'staff')
+        self.dojo.create_room('office', 'Italy')
+        self.reallocate_person('patrick', 'Italy')
+        self.assertEqual(new_person.Office, 'Italy')
+
 
 
 

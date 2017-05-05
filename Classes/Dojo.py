@@ -203,6 +203,7 @@ class Dojo:
         return room_type
 
     def get_person(self, person_name):
+        """Returns a person object given a person name"""
         for person in self.Persons:
             if person.name == person_name:
                 value = person

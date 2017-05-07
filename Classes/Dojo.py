@@ -1,6 +1,6 @@
 from classes.room import Room, Office,LivingSpace
 from classes.person import Fellow, Staff, Person
-from Database.models import*
+from Database.models import *
 import random
 
 class Dojo:
@@ -215,17 +215,19 @@ class Dojo:
             else:
                 return "Person not found"
 
-    def save_state(self, db ='sqlite:///andela.db'):
+    def save_state(self, db ='sqlite:///C:\\Users\\asiim\\Desktop\\BootCamp\\CP1\Database\\andela.db'):
         """Method to persist all the data into the database"""
-        engine = create_engine(db, echo=False)
+        engine = create_engine(db, echo=True)
         # create a Session
         Session = sessionmaker(bind=engine)
         session = Session()
 
         #create objects
         for person in self.Persons:
-            user = Person(name = person.name, role = person.role, office = person.office, accomodation = person.accomodation)
-            session.add(user)
+            person = Person(name = person.name, role = person.role, office = person.office, accomodation = person.accomodation)
+            session.add(person)
+            session.commit()
+
 
         for room in self.Rooms:
             occupants = self.Rooms[room].occupants
@@ -233,11 +235,12 @@ class Dojo:
             for occupant in occupants:
                 names.append(occupant.name)
             name_str = ','.join(names)
-            user1 = Room( name = room, use = self.Rooms[room].use, max1 = self.Rooms[room].max, occupants = name_str )
-            session.add(user1)
+            room = Room( name = room, use = self.Rooms[room].use, max1 = self.Rooms[room].max, occupants = name_str )
+            session.add(room)
+            session.commit()
 
-        session.commit()
         session.close()
+
 
 
 
@@ -246,3 +249,4 @@ dojo.create_room('livingspace', 'Paris', 'Tokyo', 'Cape Town', 'Kampala', 'Nairo
 dojo.create_room('office', 'Germany', 'Italy', 'Gambia', 'France', 'Netherlands', 'Mexico')
 dojo.load_people('input.txt')
 dojo.print_allocations()
+dojo.save_state()

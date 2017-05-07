@@ -7,7 +7,7 @@ import datetime
 
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///andela.db', echo=False)
+engine = create_engine('sqlite:///C:\\Users\\asiim\\Desktop\\BootCamp\\CP1\Database\\andela.db', echo=True)
 Base = declarative_base()
 
 class Room(Base):

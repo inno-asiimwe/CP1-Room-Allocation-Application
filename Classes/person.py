@@ -1,9 +1,9 @@
 class Person:
-    def __init__(self, role, name):
+    def __init__(self, role, name, office = None, accomodation = None):
         self.role = role
         self.name = name
-        self.office = None
-        self.accomodation = None
+        self.office = offices
+        self.accomodation = accomodation
 
 class Staff(Person):
     def __init__(self, name):

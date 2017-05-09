@@ -1,9 +1,9 @@
 class Room:
-    def __init__(self, use, name,max):
+    def __init__(self, use, name, max, occupants = [] ):
         self.use = use
         self.name = name
         self.max = max
-        self.occupants = []
+        self.occupants = occupants
 
 
 class Office(Room):

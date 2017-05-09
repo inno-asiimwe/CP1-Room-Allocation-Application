@@ -241,12 +241,34 @@ class Dojo:
 
         session.close()
 
+    def load_state(self, db = 'sqlite:///C:\\Users\\asiim\\Desktop\\BootCamp\\CP1\Database\\andela.db'):
+        """Method to load data from database into application"""
+        engine = create_engine(db, echo=True)
+
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        for person in session.query(Person).all():
+            p_person = Person(person.role, person.name, person.office, person.accomodation)
+            self.Persons.append(p_person)
+
+        for room in session.query(Room).all():
+            occupant_names = room.occupants.split(',')
+            occupants = []
+
+            for name in occupant_names:
+                occupant = self.get_person(name)
+                occupants.append(occupant)
+            p_room = Room(room.use, room.name, room.max1)
+            self.Rooms.update({p_room.name:p_room})
 
 
 
 dojo = Dojo()
-dojo.create_room('livingspace', 'Paris', 'Tokyo', 'Cape Town', 'Kampala', 'Nairobi', 'Kigali', 'Dubai')
-dojo.create_room('office', 'Germany', 'Italy', 'Gambia', 'France', 'Netherlands', 'Mexico')
-dojo.load_people('input.txt')
-dojo.print_allocations()
-dojo.save_state()
+#dojo.create_room('livingspace', 'Paris', 'Tokyo', 'Cape Town', 'Kampala', 'Nairobi', 'Kigali', 'Dubai')
+#dojo.create_room('office', 'Germany', 'Italy', 'Gambia', 'France', 'Netherlands', 'Mexico')
+#dojo.load_people('input.txt')
+dojo.load_state()
+#dojo.print_allocations()
+print(len(dojo.Rooms))
+#dojo.save_state()
